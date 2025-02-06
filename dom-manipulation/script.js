@@ -189,6 +189,8 @@ document.addEventListener("DOMContentLoaded", () => {
     categoryFilter.value = selectedCategory;
     showRandomQuote();
     createAddQuoteForm();
+
+    setInterval(syncQuotes, 600000);
 });
 
 newQuoteBtn.addEventListener("click", showRandomQuote);
