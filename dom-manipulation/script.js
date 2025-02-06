@@ -141,12 +141,43 @@ async function fetchQuotesFromServer() {
     }
 }
 
+/** ✅ NEW FUNCTION: Sync Local Quotes with Server */
+async function syncQuotes() {
+    try {
+        const response = await fetch(apiUrl);
+        const serverQuotes = await response.json();
+
+        let newQuotesAdded = 0;
+
+        serverQuotes.forEach(q => {
+            const text = q.title;
+            if (!quotes.some(quote => quote.text === text)) {
+                quotes.push({ text, category: "General" });
+                newQuotesAdded++;
+            }
+        });
+
+        saveQuotes();
+        populateCategories();
+
+        if (newQuotesAdded > 0) {
+            alert(`${newQuotesAdded} new quotes synced with the server!`);
+        } else {
+            alert("No new quotes found to sync.");
+        }
+
+    } catch (error) {
+        console.error("Syncing quotes failed:", error);
+    }
+}
+
 function createAddQuoteForm() {
     const formContainer = document.createElement("div");
     formContainer.innerHTML = `
         <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
         <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
         <button onclick="addQuote()">Add Quote</button>
+        <button onclick="syncQuotes()">Sync Quotes</button> <!-- Added Sync Button -->
     `;
     document.body.appendChild(formContainer);
 }
