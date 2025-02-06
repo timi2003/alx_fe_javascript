@@ -119,8 +119,6 @@ function createAddQuoteForm() {
         <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
         <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
         <button onclick="addQuote()">Add Quote</button>
-        <button onclick="exportToJsonFile()">Export Quotes</button>
-        <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
     `;
     document.body.appendChild(formContainer);
 }
