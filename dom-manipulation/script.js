@@ -95,23 +95,28 @@ function importFromJsonFile(event) {
     fileReader.readAsText(event.target.files[0]);
 }
 
-async function syncWithServer() {
+async function fetchQuotesFromServer() {
     try {
         const response = await fetch(apiUrl);
         const serverQuotes = await response.json();
+        
+        // Extract a limited number of quotes and add to local storage
         serverQuotes.slice(0, 5).forEach(q => {
             const text = q.title;
             if (!quotes.some(quote => quote.text === text)) {
                 quotes.push({ text, category: "General" });
             }
         });
+
         saveQuotes();
         populateCategories();
-        alert("Quotes synced with server!");
+        alert("Quotes fetched from server!");
+
     } catch (error) {
-        console.error("Sync failed:", error);
+        console.error("Fetching from server failed:", error);
     }
 }
+
 
 function createAddQuoteForm() {
     const formContainer = document.createElement("div");
