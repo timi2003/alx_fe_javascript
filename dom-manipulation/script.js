@@ -161,14 +161,14 @@ async function syncQuotes() {
         populateCategories();
 
         if (newQuotesAdded > 0) {
-            alert(`${newQuotesAdded} new quotes synced with the server!`);
+            displayNotification(`${newQuotesAdded} new quotes synced with the server!`);
         } else {
-            alert("No new quotes found to sync.");
+            displayNotification("No new quotes found to sync.");
         }
 
     } catch (error) {
         console.error("Syncing quotes failed:", error);
-        
+        displayNotification("Error syncing quotes with the server.", 'error');
     }
 }
 
@@ -196,8 +196,6 @@ function displayNotification(message, type) {
         notificationContainer.remove();
     }, 5000); // Adjust duration as needed
 }
-
-
 
 document.addEventListener("DOMContentLoaded", () => {
     loadQuotes();
