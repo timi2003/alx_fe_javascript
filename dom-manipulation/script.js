@@ -168,7 +168,7 @@ async function syncQuotes() {
 
     } catch (error) {
         console.error("Syncing quotes failed:", error);
-        displayNotification("Error syncing quotes with the server.", 'error');
+        
     }
 }
 
@@ -196,6 +196,7 @@ function displayNotification(message, type) {
         notificationContainer.remove();
     }, 5000); // Adjust duration as needed
 }
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
