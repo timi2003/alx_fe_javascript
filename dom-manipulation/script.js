@@ -183,6 +183,21 @@ function createAddQuoteForm() {
     document.body.appendChild(formContainer);
 }
 
+function displayNotification(message, type) {
+    const notificationContainer = document.createElement("div");
+    notificationContainer.classList.add("notification", type);
+    notificationContainer.textContent = message;
+
+    // Append to the body or a specific container
+    document.body.appendChild(notificationContainer);
+
+    // Remove notification after a few seconds
+    setTimeout(() => {
+        notificationContainer.remove();
+    }, 5000); // Adjust duration as needed
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
     loadQuotes();
     populateCategories();
