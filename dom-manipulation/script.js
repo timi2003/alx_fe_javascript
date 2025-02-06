@@ -32,6 +32,26 @@ function showRandomQuote() {
     quoteDisplay.textContent = `"${randomQuote.text}" - (${randomQuote.category})`;
 }
 
+async function postQuoteToServer(text, category) {
+    try {
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ title: text, category: category })
+        });
+
+        if (response.ok) {
+            console.log("Quote successfully posted to the server!");
+        } else {
+            console.error("Failed to post quote to the server.");
+        }
+    } catch (error) {
+        console.error("Error posting quote:", error);
+    }
+}
+
 function addQuote() {
     const newQuoteText = document.getElementById("newQuoteText").value.trim();
     const newQuoteCategory = document.getElementById("newQuoteCategory").value.trim();
@@ -44,6 +64,10 @@ function addQuote() {
     quotes.push({ text: newQuoteText, category: newQuoteCategory });
     saveQuotes();
     populateCategories();
+
+    // Post new quote to the server
+    postQuoteToServer(newQuoteText, newQuoteCategory);
+
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
     alert("Quote added successfully!");
@@ -116,7 +140,6 @@ async function fetchQuotesFromServer() {
         console.error("Fetching from server failed:", error);
     }
 }
-
 
 function createAddQuoteForm() {
     const formContainer = document.createElement("div");
