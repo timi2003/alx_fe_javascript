@@ -6,8 +6,6 @@ const apiUrl = "https://jsonplaceholder.typicode.com/posts";
 const quoteDisplay = document.getElementById("quoteDisplay");
 const newQuoteBtn = document.getElementById("newQuote");
 const categoryFilter = document.getElementById("categoryFilter");
-const newQuoteText = document.getElementById("newQuoteText");
-const newQuoteCategory = document.getElementById("newQuoteCategory");
 const importFile = document.getElementById("importFile");
 
 function loadQuotes() {
@@ -35,17 +33,19 @@ function showRandomQuote() {
 }
 
 function addQuote() {
-    const text = newQuoteText.value.trim();
-    const category = newQuoteCategory.value.trim();
-    if (!text || !category) {
+    const newQuoteText = document.getElementById("newQuoteText").value.trim();
+    const newQuoteCategory = document.getElementById("newQuoteCategory").value.trim();
+    
+    if (!newQuoteText || !newQuoteCategory) {
         alert("Please enter both a quote and category.");
         return;
     }
-    quotes.push({ text, category });
+
+    quotes.push({ text: newQuoteText, category: newQuoteCategory });
     saveQuotes();
     populateCategories();
-    newQuoteText.value = "";
-    newQuoteCategory.value = "";
+    document.getElementById("newQuoteText").value = "";
+    document.getElementById("newQuoteCategory").value = "";
     alert("Quote added successfully!");
 }
 
@@ -61,20 +61,19 @@ function filterQuotes() {
 }
 
 function exportToJsonFile() {
-    const dataStr = JSON.stringify(quotes, null, 2); // Convert quotes array to JSON format
+    const dataStr = JSON.stringify(quotes, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     
     const a = document.createElement("a");
     a.href = url;
-    a.download = "quotes.json"; // File name for download
+    a.download = "quotes.json";
     document.body.appendChild(a);
     a.click();
     
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
-
 
 function importFromJsonFile(event) {
     const fileReader = new FileReader();
@@ -114,12 +113,25 @@ async function syncWithServer() {
     }
 }
 
+function createAddQuoteForm() {
+    const formContainer = document.createElement("div");
+    formContainer.innerHTML = `
+        <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+        <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+        <button onclick="addQuote()">Add Quote</button>
+        <button onclick="exportToJsonFile()">Export Quotes</button>
+        <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+    `;
+    document.body.appendChild(formContainer);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     loadQuotes();
     populateCategories();
     selectedCategory = localStorage.getItem("selectedCategory") || "all";
     categoryFilter.value = selectedCategory;
     showRandomQuote();
+    createAddQuoteForm();
 });
 
 newQuoteBtn.addEventListener("click", showRandomQuote);
